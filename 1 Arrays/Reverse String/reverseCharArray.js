@@ -7,7 +7,6 @@ function reverse(arrayOfChars) {
     arrayOfChars[i] = arrayOfChars[arrayOfChars.length - 1 - i];
     arrayOfChars[arrayOfChars.length - 1 - i] = temp;
   }
-
 }
 
 const arrayOfChars = [
