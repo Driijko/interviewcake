@@ -9,14 +9,16 @@ function reverse(arrayOfChars) {
   }
 }
 
-const arrayOfChars = [
-  "a",
-  "b",
-  "c",
-  "d", 
-  "e"
-]
+// const arrayOfChars = [
+//   "a",
+//   "b",
+//   "c",
+//   "d", 
+//   "e"
+// ]
 
-reverse(arrayOfChars);
+// reverse(arrayOfChars);
 
-console.log(arrayOfChars);
+// console.log(arrayOfChars);
+
+module.exports.reverseCharArray = reverse;
