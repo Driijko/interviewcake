@@ -1,5 +1,3 @@
-const {mergeSort} = require("../0 DS and Algos/Algos/mergeSort");
-
 function canTwoMoviesFillFlight(movieLengths, flightLength) {
 
   if (movieLengths.length <= 1) return false;
