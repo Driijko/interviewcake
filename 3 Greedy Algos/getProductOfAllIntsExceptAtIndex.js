@@ -23,18 +23,14 @@ function getProductsOfAllIntsExceptAtIndex(intArray) {
     productSoFar *= intArray[i];
   }
 
-  const productsOfIntsAfterIndex = [];
+  const productsOfAllIntsExceptAtIndex = [];
   productSoFar = 1;
   for (let i = intArray.length - 1; i > -1; i--) {
-    productsOfIntsAfterIndex[i] = productSoFar;
+    productsOfAllIntsExceptAtIndex[i] = productSoFar * productsOfIntsBeforeIndex[i];
     productSoFar *= intArray[i];
   }
 
-  for (let i = 0 ; i < intArray.length; i++) {
-    productsOfIntsAfterIndex[i] = productsOfIntsAfterIndex[i] * productsOfIntsBeforeIndex[i];
-  }
-
-  return productsOfIntsAfterIndex;
+  return productsOfAllIntsExceptAtIndex;
 
 }
 
