@@ -1,15 +1,3 @@
-// function getProductsOfAllIntsExceptAtIndex(intArray) {
-//   let totalProduct = 1;
-//   const products = [];
-//   for (let i = 0; i < intArray.length; i++) {
-//     totalProduct *= intArray[i];
-//   }
-//   for (let i = 0; i < intArray.length; i++) {
-//     products[i] = Math.floor(totalProduct / intArray[i]);
-//   }
-//   return products;
-// }
-
 function getProductsOfAllIntsExceptAtIndex(intArray) {
 
   if (intArray.length < 2) {
@@ -31,7 +19,6 @@ function getProductsOfAllIntsExceptAtIndex(intArray) {
   }
 
   return productsOfAllIntsExceptAtIndex;
-
 }
 
 const intArray = [1, 2, 3, 4, 5];
