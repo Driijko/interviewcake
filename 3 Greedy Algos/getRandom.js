@@ -12,16 +12,38 @@ function getRandom(floor, ceiling) {
 //   return array;
 // }
 
+// function shuffle(array) {
+
+//   if (array.length < 2) return array;
+
+//   const iterations = array.length;
+//   const newOrder = [];
+//   for(let i = 0; i < iterations; i++) {
+//     newOrder[i] = array.splice(getRandom(0, array.length - 1), 1)[0];
+//     console.log(array);
+//   }
+//   return newOrder;
+// }
+
 function shuffle(array) {
-  const iterations = array.length
-  const newOrder = [];
-  for(let i = 0; i < iterations; i++) {
-    newOrder[i] = array.splice(getRandom(0, array.length - 1), 1)[0];
-    console.log(array);
+
+  if (array.length < 2) return array;
+
+  for (let i = 0 ; i < array.length - 1; i++) {
+
+    const randomIndex = getRandom(i, array.length -1);
+
+    if (randomIndex !== i) {
+      const temp = array[i];
+      array[i] = array[randomIndex];
+      array[randomIndex] = temp;
+    }
+
+    return array;
+
   }
-  return newOrder;
 }
 
-const sample = [1, 12, 3, 4, 5];
+const sample = [1, 2, 3, 4, 5];
 
 console.log(shuffle(sample));
