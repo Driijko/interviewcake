@@ -1,82 +1,95 @@
+function doesWordComeFirst(mainWord, comparison) {
+
+  if (mainWord.length < 1 || comparison.length < 1) {
+    throw new Error("Main word and comparison word must both be at least one character long");
+  }
+
+  if(typeof comparison === "object") {
+
+    for(let i = 0; i < mainWord.length; i++) {
+      if (mainWord.charCodeAt(i) < comparison[i]) {
+        return true;
+      }
+      else if (
+        (comparison[i] === undefined)
+        || (mainWord.charCodeAt(i) > comparison[i])
+      ) {
+        return false;
+      }
+    }
+  }
+  else {
+    for (let i = 0 ; i < mainWord.length; i++) {
+      if (mainWord.charCodeAt(i) < comparison.charCodeAt(i)) {
+        return true;
+      }
+      else if (
+        (comparison[i] === undefined)
+        || (mainWord.charCodeAt(i) > comparison.charCodeAt(i))
+      ) {
+        return false;
+      }
+    }
+  }
+
+  if (mainWord.length !== comparison.length) {
+    return true;
+  }
+  else {
+    throw new Error("Comparitive word must be a different word from main word");
+  }
+}
+
 function findRotationPoint(words) {
-  const offset = wordNum(words[0]);
-  console.log("offset is", offset);
+  const offset = [];
+  for (let i = 0 ; i < words[0].length; i++) {
+    offset[i] = words[0].charCodeAt(i);
+  }
 
   let floorIndex = -1;
   let ceilingIndex = words.length;
 
   while (floorIndex + 1 < ceilingIndex) {
-
-    const indexBeingChecked = Math.floor((ceilingIndex - floorIndex) / 2);
-    console.log("word num is", wordNum(words[indexBeingChecked]));
-
-    if (checkForRotation(words, indexBeingChecked)) {
-      return indexBeingChecked;
+    const indexBeingChecked = Math.floor((ceilingIndex - floorIndex) / 2) + floorIndex;
+    if (indexBeingChecked > 0) {
+      const mainWord = words[indexBeingChecked];
+      const prevWord = words[indexBeingChecked - 1];
+      if (doesWordComeFirst(mainWord, prevWord)) {
+        return indexBeingChecked;
+      }
+      
+      if (doesWordComeFirst(mainWord, offset)) {
+        ceilingIndex = indexBeingChecked;
+      }
+      else {
+        floorIndex = indexBeingChecked;
+      }
     }
-    else if (wordNum(words[indexBeingChecked]) >= offset) {
+    else {
       floorIndex = indexBeingChecked;
-    }
-    else if (wordNum(words[indexBeingChecked]) < offset) {
-      ceilingIndex = indexBeingChecked;
     }
   }
   return false;
 }
 
-function wordNum(word) {
-  let wordNum = 0;
-  for (let i = 0; i < word.length; i++) {
-    wordNum += word.charCodeAt(i);
-  }
-  return wordNum
-}
+// const words = [
+//   'ptolemaic',
+//   'retrograde',
+//   'supplant',
+//   'undulate',
+//   'asymptote',  // <-- rotates here!
+//   'babka',
+//   'banoffee',
+//   'engender',
+//   'karpatka',
+//   'othellolagkage',
+// ];
 
+words = [
+  "cape",
+  "cake"
+]
 
-function checkForRotation(words, index) {
+// console.log(findRotationPoint(words));
 
-  if (index === 0) {
-    throw new Error("Check cannot be applied to first word in a list");
-  }
-
-  const wordBeingChecked = words[index];
-  const prevWord = words[index - 1];
-  let wordBeingCheckedNum = 0;
-  let prevWordNum = 0;
-  let charCounter = 0;
-
-  const biggerWordLength = Math.max(wordBeingChecked.length, prevWord.length);
-
-  for (let i = 0 ; i < biggerWordLength; i++) {
-    if (i < wordBeingChecked.length) {
-      wordBeingCheckedNum += wordBeingChecked.charCodeAt(i);
-    }
-    if (i < prevWord.length) {
-      prevWordNum += prevWord.charCodeAt(i);
-    }
-    if (wordBeingCheckedNum !== prevWordNum) {
-      break;
-    }
-  }
-
-  if (wordBeingCheckedNum < prevWordNum) return true;
-  else if (wordBeingCheckedNum === prevWordNum) {
-    throw new Error("Duplicate words in list");
-  }
-  else return false;
-}
-
-const words = [
-  'ptolemaic',
-  'retrograde',
-  'supplant',
-  'undulate',
-  'xenoepist',
-  'asymptote',  // <-- rotates here!
-  'babka',
-  'banoffee',
-  'engender',
-  'karpatka',
-  'othellolagkage',
-];
-
-console.log(findRotationPoint(words));
+console.log("abba" < "abbb")
