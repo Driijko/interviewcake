@@ -16,30 +16,56 @@ class BinaryTreeNode {
   }
 }
 
-function isBinarySearchTree(treeRoot) {
+// Recursive Version
+function isBinarySearchTree(node, lowerBound=-Infinity, upperBound=Infinity) {
 
-  if (!(treeRoot)) return false;
-
-  function recursiveCall(node, lowerBound=-Infinity, upperBound=Infinity) {
-    if (node.left) {
-      if (node.left.value >= node.value || node.left.value <= lowerBound) {
-        return false;
-      }
-      else if (recursiveCall(node.left, lowerBound, node.value) === false) {
-        return false;
-      }
-    }
-    if (node.right) {
-      if (node.right.value <= node.value || node.right.value >= upperBound) {
-        return false;
-      }
-      else if (recursiveCall(node.right, node.value, upperBound) === false) {
-        return false;
-      }
-    }
+  if (!(node)) {
     return true;
   }
-  return recursiveCall(treeRoot);
+
+  if (node.value <= lowerBound || node.value >= upperBound) {
+    return false;
+  }
+
+  return (
+    isBinarySearchTree(node.left, lowerBound, node.value) 
+    && isBinarySearchTree(node.right, node.value, upperBound)
+  )
+} 
+
+
+// Iterative Version
+function isBinarySearchTree(treeRoot) {
+  const nodesToCheck = [];
+  nodesToCheck.push({
+    node: treeRoot,
+    lowerBound: -Infinity,
+    upperBound: Infinity
+  });
+
+  while(nodesToCheck.length > 0) {
+    const {node, lowerBound, upperBound} = nodesToCheck.pop();
+
+    if (node.value <= lowerBound || node.value >= upperBound) {
+      return false;
+    }
+
+    if (node.left) {
+      nodesToCheck.push({
+        node: node.left,
+        lowerBound: lowerBound,
+        upperBound: node.value
+      })
+    }
+    if (node.right) {
+      nodesToCheck.push({
+        node: node.right,
+        lowerBound: node.value,
+        upperBound: upperBound
+      })
+    }
+  }
+  return true;
 }
 
 const treeRoot = new BinaryTreeNode(50);
