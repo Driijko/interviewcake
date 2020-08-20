@@ -42,6 +42,8 @@ function isTreeSuperbalanced(node) {
 }
 
 function isTreeBalanced(treeRoot) {
+  if (!(treeRoot)) return true;
+
   let minDepth = null;
   let maxDepth = null;
 
@@ -58,11 +60,11 @@ function isTreeBalanced(treeRoot) {
       if (maxDepth - minDepth > 1) return false;
     }
     else {
-      if (node.right !== null && recursiveCall(node.right, depth + 1) === false) {
+      if (node.left !== null && recursiveCall(node.left, depth + 1) === false) {
         return false;
       } 
-      if (node.left !== null && recursiveCall(node.left, depth + 1) === false) {
-        return false
+      if (node.right !== null && recursiveCall(node.right, depth + 1) === false) {
+        return false;
       }
     }
 
@@ -82,4 +84,4 @@ let rightNode2 = rightNode.insertRight(7);
 let rightNode3 = rightNode2.insertLeft(4);
 // rightNode3.insertLeft(1);
 
-console.log(isTreeBalanced(treeRoot));
+console.log(isTreeBalanced());
