@@ -47,6 +47,28 @@ function isSecondLargest(treeRoot) {
   return secondLargest;
 }
 
+function findXLargestNum(treeRoot, num) {
+  let xLargest = 0;
+  let currentNode = treeRoot;
+  while (xLargest < num) {
+    if (currentNode.right) {
+      if (xLargest < num) {
+        currentNode = currentNode.right;
+      }
+      else {
+        
+      }
+    }
+    else if (currentNode.left && xLargest < num) {
+      xLargest++;
+      currentNode = currentNode.left;
+    }
+    else {
+      return currentNode.value;
+    }
+  }
+}
+
 function findSecondLargest(treeRoot) {
   let largestFound = false;
   let secondLargest;
