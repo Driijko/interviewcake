@@ -55,20 +55,15 @@ graph = [nodeA, nodeB, nodeC, nodeD, nodeE];
 const colors = ['red', 'green', 'blue', 'orange'];
 
 function colorGraph(graph, colors) {
-  let maxDegree = 0;
   for (const node of graph) {
     const illegalColors = new Set();
 
-    while (maxDegree < node.neighbors.size) {
-      maxDegree = node.neighbors.size;
-    }
     for (const neighbor of node.neighbors) {
       if (neighbor.color) {
         illegalColors.add(neighbor.color);
       }
     }
-    console.log(illegalColors);
-    for (let i = 0 ; i < maxDegree + 1 ; i++) {
+    for (let i = 0 ; i < colors.length ; i++) {
       if (illegalColors.has(colors[i]) === false) {
         node.color = colors[i];
         break;
