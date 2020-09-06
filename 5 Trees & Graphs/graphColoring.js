@@ -59,6 +59,9 @@ function colorGraph(graph, colors) {
     const illegalColors = new Set();
 
     for (const neighbor of node.neighbors) {
+      if (neighbor.label === node.label) {
+        throw new Error("Graphs with loops cannot be legally colored.")
+      }
       if (neighbor.color) {
         illegalColors.add(neighbor.color);
       }
