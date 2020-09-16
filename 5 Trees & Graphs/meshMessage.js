@@ -33,6 +33,10 @@ function getPath(graph, startNode, endNode) {
     return [startNode];
   }
   
+  if ((!(graph[startNode])) || (!(graph[endNode]))) {
+    throw new Error("Either the start or end node is not in the network");
+  }
+  
   const toCheck = new Queue();
   toCheck.enqueue([startNode]);
   const alreadyChecked = new Set();
@@ -45,21 +49,18 @@ function getPath(graph, startNode, endNode) {
         path.push(person);
         return path;
       }
-      else if (alreadyChecked.has(person) === false && graph[person]) {
-        const newPath = [...path];
-        newPath.push(person);
-        toCheck.enqueue(newPath);
+      else if (alreadyChecked.has(person) === false) {
+        if (graph[person]) {
+          const newPath = [...path];
+          newPath.push(person);
+          toCheck.enqueue(newPath);
+        }
       }
     }
     alreadyChecked.add(currentNode);
     toCheck.dequeue();
   }
-  if (graph[endNode]) {
-    return null;
-  }
-  else {
-    throw new Error(`Unable to find a path from ${startNode} to ${endNode}`)
-  }
+  return null;
 }
 
 console.log(getPath(network, 'Min', 'Noam'));
