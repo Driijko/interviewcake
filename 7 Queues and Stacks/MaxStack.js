@@ -35,13 +35,17 @@ class MaxStack {
 
     // Initialize an empty stack
     this.items = [];
-    this.max = -Infinity;
+    this.maxValues = new Stack();
+    this.maxValues.push(-Infinity);
   }
 
   // Push a new item onto the stack
   push(item) {
     this.items.push(item);
-    this.max = Math.max(item, this.max);
+    // console.log(this.maxValues.peek())
+    if (this.maxValues.peek() <= item) {
+      this.maxValues.push(item);
+    }
   }
 
   // Remove and return the last item
@@ -53,11 +57,8 @@ class MaxStack {
       return null;
     }
     const poppedItem = this.items.pop();
-    if (this.max === poppedItem) {
-      this.max = -Infinity;
-      for (const item of this.items) {
-        this.max = Math.max(item, this.max);
-      }
+    if (this.maxValues.peek() === poppedItem) {
+      this.maxValues.pop();
     }
     return poppedItem;
   }
@@ -71,7 +72,8 @@ class MaxStack {
   }
 
   getMax() {
-    return this.max;
+    console.log(this.maxValues.peek());
+    return this.maxValues.peek();
   }
 }
 
@@ -90,9 +92,20 @@ class MaxStack {
 // }
 
 const maxStack = new MaxStack();
-maxStack.push(5);
+maxStack.push(4);
 maxStack.push(7);
-maxStack.push(145);
-maxStack.push(5656);
+maxStack.push(7);
+maxStack.push(8);
+
+maxStack.getMax();
 maxStack.pop();
-console.log(maxStack.getMax());
+maxStack.getMax();
+maxStack.pop();
+
+maxStack.getMax();
+maxStack.pop();
+
+maxStack.getMax();
+
+maxStack.pop();
+maxStack.getMax();
