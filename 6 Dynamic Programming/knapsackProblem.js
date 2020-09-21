@@ -16,7 +16,7 @@ function maxDuffelBagValue(cakeTypes, weightCapacity) {
       // Test to see if the cakeType fits into a backpack of capacity 'j'. 
       if (j >= cakeType.weight) {
 
-        // It fits! Let's establish a variable 'bestGuessSoFar' which we will change it we find 
+        // It fits! Let's establish a variable 'bestGuessSoFar' which we will change if we find 
         // better options. 
         let bestGuessSoFar = cakeType.value;
 
@@ -24,9 +24,11 @@ function maxDuffelBagValue(cakeTypes, weightCapacity) {
         const leftOverCapacity = j - cakeType.weight;
 
         // If there is enough leftover space, we can add more of the same cake. 
-        if (leftOverCapacity >= cakeType.weight) {
+        if (leftOverCapacity >= cakeType.weight && cakeType.weight > 0) {
           bestGuessSoFar += row[leftOverCapacity];
         }
+        console.log(bestGuessSoFar);
+
 
         // Now let's see if we have already calculated options for previously analyzed cakesTypes. 
         if (results[i - 1]) {
@@ -65,11 +67,12 @@ function maxDuffelBagValue(cakeTypes, weightCapacity) {
     }
     results.push(row);
   }
+  console.log(results);
   return results[results.length - 1][results[results.length - 1].length - 1];
 }
 
 const cakeTypes = [
-  { weight: 4, value: 160 },
+  { weight: 0, value: 0 },
   { weight: 3, value: 90 },
   { weight: 2, value: 15 },
 ];
