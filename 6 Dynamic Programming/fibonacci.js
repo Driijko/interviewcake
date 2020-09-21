@@ -1,28 +1,26 @@
 function fib(n) {
 
   const memo = {};
+  let functionCalls = 0;
 
   function recursiveCall(n) {
+    functionCalls++;
+
     // Base Case
     if (n === 0 || n === 1) {
-      console.log(`base case: ${n}`)
       return n;
     }
-    else if (memo[n]) {
-      console.log(`fetching fib(${n}) from memo`);
-      return memo[n];
-    }
     else {
-      console.log(`calculating fib(${n})`);
-      memo[n] = recursiveCall(n - 1) + recursiveCall(n - 2);
+      memo[n] = (
+        (memo[n - 1] ? memo[n - 1] : recursiveCall(n - 1))
+        + (memo[n - 2] ? memo[n - 2]: recursiveCall(n - 2))
+      )
       return memo[n];
     } 
   }
-
-  if (memo[n]) {
-    return memo[n];
-  }
-  return recursiveCall(n);
+  const result = recursiveCall(n);
+  console.log(`${functionCalls} function calls made`);
+  return result;
 }
 
-console.log(fib(8));
+console.log(fib(5));
