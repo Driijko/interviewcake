@@ -10,6 +10,7 @@ function fib(n) {
     if (n === 0 || n === 1) {
       return n;
     }
+    // Recursive Case
     else {
       memo[n] = (
         (memo[n - 1] ? memo[n - 1] : recursiveCall(n - 1))
@@ -18,6 +19,7 @@ function fib(n) {
       return memo[n];
     } 
   }
+  
   const result = recursiveCall(n);
   console.log(`${functionCalls} function calls made`);
   return result;
