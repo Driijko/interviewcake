@@ -5,25 +5,61 @@ class LinkedListNode {
   }
 }
 
+// function containsCycle(firstNode) {
+
+//   if (!(firstNode)) {
+//     return false;
+//   }
+
+//   const nodesVisited = new Set();
+
+//   currentNode = firstNode;
+
+//   while (currentNode.next !== null) {
+
+//     if (nodesVisited.has(currentNode)) {
+//       return true;
+//     }
+
+//     nodesVisited.add(currentNode);
+//     currentNode = currentNode.next;    
+//   }
+
+//   return false;
+// }
+
+function valuesToLinkedListNodes(values) {
+  const nodes = [];
+  for (let i = 0; i < values.length; i++) {
+    const node = new LinkedListNode(values[i]);
+    if (i > 0) {
+      nodes[i - 1].next = node;
+    }
+    nodes.push(node);
+  }
+  return nodes;
+}
+
 function containsCycle(firstNode) {
 
   if (!(firstNode)) {
     return false;
   }
 
-  const nodesVisited = new Set();
+  let fastRunner = firstNode;
+  let slowRunner = firstNode;
 
-  currentNode = firstNode;
+  while(fastRunner && fastRunner.next) {
 
-  while (currentNode.next !== null) {
-
-    if (nodesVisited.has(currentNode)) {
+    fastRunner = fastRunner.next.next;
+    slowRunner = slowRunner.next;
+    
+    if (fastRunner === slowRunner) {
       return true;
     }
-
-    nodesVisited.add(currentNode);
-    currentNode = currentNode.next;    
   }
-
   return false;
 }
+
+const nodes = valuesToLinkedListNodes([1, 2, 3, 4]);
+console.log(containsCycle(nodes[0]));
