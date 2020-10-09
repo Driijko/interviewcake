@@ -1,13 +1,17 @@
-class Trie {
-  addWord(word) {
-    let editedWord = word;
-    if (word[0] === "w" && word[1] === "w" && word[2] === "w") {
-      editedWord = word.slice(4);
+const visited = {};
+
+function addUrl(url) {
+  visited[url[0]] = {};
+  let nestedPosition = visited[url[0]];
+  for (let i = 1 ; i < url.length ; i++) {
+    const currentChar = url[i];
+    if (!(nestedPosition[currentChar])) {
+      nestedPosition[currentChar] = {};
     }
-    return editedWord;
+    nestedPosition = nestedPosition[currentChar];
   }
 }
 
-const trie = new Trie();
-console.log(trie.addWord("www.website"));
+addUrl("www.website");
+console.log(visited["w"]["w"]["w"]["."]["w"]["e"]["b"]["s"]["i"]);
 
