@@ -1,33 +1,19 @@
-const existingLinks = new Set();
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+let slugCount = 62 * 62 * 62 + 62;
 
 function shortenUrl() {
-  let url = "https://ca.ke/";
-  let link = rand7CharString();
-  while (existingLinks.has(link)) {
-    link = rand7CharString();
+  return "https://ca.ke/" + generateSlug();
+}
+
+function generateSlug() {
+  const charNum = 7;
+  const base = 62;
+  let slug = "";
+  for (let i = charNum; i > 0 ; i--) {
+    slug += alphabet[Math.floor(slugCount % Math.pow(base, i) / Math.pow(base, i - 1))]
   }
-  existingLinks.add(link);
-  return url + link;
+  slugCount++;
+  return slug;
 }
 
-function rand7CharString() {
-
-  let string = "";
-
-  for (let i = 0 ; i < 7 ; i++) {
-    let charNum = randInt(0, 62) + 48;
-    if (charNum > 57) {
-      charNum += 7;
-    }
-    if (charNum > 90) {
-      charNum += 6;
-    }
-    const char = String.fromCharCode(charNum);
-    string += char;
-  }
-  return string;
-}
-
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+console.log(shortenUrl(), slugCount);
