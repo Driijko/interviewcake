@@ -13,6 +13,30 @@ function addUrl(url) {
   nestedPosition["*"] = true;
 }
 
-addUrl("www.website");
-console.log(visited["w"]["w"]["w"]["."]["w"]["e"]["b"]["s"]["i"]);
+class Trie {
+  constructor() {
+    this.rootNode = {};
+  }
+  addWord(word) {
+    let currentNode = this.rootNode;
+    let isNewWord = false;
+
+    for (let i = 0 ; i < word.length ; i++) {
+      if (!(currentNode.hasOwnProperty(word[i]))) {
+        isNewWord = true;
+        currentNode[word[i]] = {};
+      }
+      currentNode = currentNode[word[i]];
+    }
+
+    if (!(currentNode.hasOwnProperty("End of Word"))) {
+      isNewWord = true;
+      currentNode["End of Word"] = true;
+    }
+
+    return isNewWord;
+  }
+}
+
+
 
