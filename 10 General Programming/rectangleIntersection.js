@@ -1,27 +1,34 @@
 function rectangleIntersection(rec1, rec2) {
-    const recIntersection = {};
 
-    // Determine horizontal intersection.
-    const leftMostRec = rec1.leftX <= rec2.leftX ? rec1 : rec2;
-    const leftMostRecRight = leftMostRec.leftX + leftMostRec.width;
-    const rightMostRec = leftMostRec === rec1 ? rec2 : rec1;
-    if (!(rightMostRec.leftX < (leftMostRecRight))) {
+    const hOverlap = rangeOverlap(rec1.leftX, rec1.width, rec2.leftX, rec2.width);
+    if (!(hOverlap)) {
         return null;
     }
-    else {
-        recIntersection.leftX = rightMostRec.leftX;
-        recIntersection.width = leftMostRecRight - rightMostRec.leftX;
-    }
+    const vOverlap = rangeOverlap(rec1.bottomY, rec1.height, rec2.bottomY, rec2.height);
 
-    // Determine Vertical intersection.
-    const bottomMostRec = rec1.bottomY <= rec2.bottomY ? rec1 : rec2;
-    const bottomMostRecTop = bottomMostRec.bottomY + bottomMostRec.height;
-    const topMostRec = bottomMostRec === rec1 ? rec2 : rec1;
-    recIntersection.bottomY = topMostRec.bottomY;
-    recIntersection.height = bottomMostRecTop - topMostRec.bottomY;
+    const recIntersection = {
+        leftX : hOverlap.coor,
+        bottomY: vOverlap.coor,
+        width: hOverlap.range,
+        height: vOverlap.range
+    }
 
     return recIntersection;
 
+}
+
+function rangeOverlap(coor1, range1, coor2, range2) {
+    const highestStartPoint = Math.max(coor1, coor2);
+    const lowestEndPoint = Math.min(coor1 + range1, coor2 + range2);
+    if (lowestEndPoint <= highestStartPoint) {
+        return null;
+    }
+    else {
+        return {
+            coor: highestStartPoint,
+            range: lowestEndPoint - highestStartPoint
+        }
+    }
 }
 
 const rec1 = {
@@ -32,10 +39,11 @@ const rec1 = {
 }
 
 const rec2 = {
-    leftX: 5,
+    leftX: 7,
     bottomY: 2,
     width: 3,
     height: 6
 }
 
-rectangleIntersection(rec1, rec2);
+// console.log(rangeOverlap(rec1.leftX, rec1.width, rec2.leftX, rec2.width));
+console.log(rectangleIntersection(rec1, rec2));
