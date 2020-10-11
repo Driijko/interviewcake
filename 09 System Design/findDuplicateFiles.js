@@ -1,43 +1,59 @@
+// Import Modules ///////////////////////////////////////////////////////////////
 const fs = require("fs");
+const crypto = require("crypto");
 
 function findDuplicateFiles(startingDirectory) {
+
+  // Initialize variables ///////////////////////////////////////////////////////
   const filesAlreadySeen = {};
   let stack = [startingDirectory];
   let duplicates = [];
 
+  // Main loop: move iteratively through every path ////////////////////////////
   while(stack.length) {
-    currentPathName = stack.pop();
-    currentPath = fs.statSync(currentPathName);
 
-    if (currentPath.isFile()) {
-      const fileContents = fs.readFileSync(currentPathName);
-      const currentLastEditedTime = currentPath.mtime;
+    currentPath = stack.pop();
+    currentPathAnalysis = fs.statSync(currentPath);
 
-      if (filesAlreadySeen.hasOwnProperty(fileContents)) {
-        const existingFile = filesAlreadySeen[fileContents];
+    // Current Path is file
+    if (currentPathAnalysis.isFile()) {
 
+      const filePath = currentPath;
+      const fileAnalysis = currentPathAnalysis;
+
+      const fileHash = sampleHashFile(filePath);
+      const currentLastEditedTime = fileAnalysis.mtime;
+
+      // We check to see if we have already seen these file contents before
+      if (filesAlreadySeen.hasOwnProperty(fileHash)) {
+        const existingFile = filesAlreadySeen[fileHash];
+
+        // We compare last edited time to determine which is a copy.
         if (currentLastEditedTime > existingFile.lastEditedTime) {
-          duplicates.push([currentPathName, existingFile.path]);
+          duplicates.push([filePath, existingFile.path]);
         }
         else {
-          duplicates.push([existingFile.path, currentPath]);
-          filesSeenAlready[fileContents] = {
+          duplicates.push([existingFile.path, filePath]);
+          filesSeenAlready[fileHash] = {
             lastEditedTime : currentLastEditedTime,
-            path : currentPathName
+            path : filePath
           }
         }
       }
+      // If we haven't seen the file contents before, we now add them to our
+      // 'filesAlreadySeen' object. 
       else {
-        filesAlreadySeen[fileContents] = {
+        filesAlreadySeen[fileHash] = {
           lastEditedTime: currentLastEditedTime,
-          path: currentPathName
+          path: filePath
         }
       }
     }
-    else if (currentPath.isDirectory()) {
-      const directoryContents = fs.readdirSync(currentPathName);
+    // Current path is directory
+    else if (currentPathAnalysis.isDirectory()) {
+      const directoryContents = fs.readdirSync(currentPath);
       directoryContents.forEach(path => {
-        stack.push(`${currentPathName}/${path}`);
+        stack.push(`${currentPath}/${path}`);
       })
     }
   }
@@ -46,3 +62,33 @@ function findDuplicateFiles(startingDirectory) {
 }
 
 console.log(findDuplicateFiles("./Test Folder"));
+
+function sampleHashFile(path) {
+  const file = fs.statSync(path);
+
+  const sampleSize = 4000;
+  const totalBytes = file.size;
+
+  const hash = crypto.createHash("sha512");
+
+  if (totalBytes < sampleSize * 3) {
+    hash.update(fs.readFileSync(path));
+  }
+  else {
+    const numBytesBetweenSamples = (totalBytes - sampleSize * 3) / 2;
+    const buffer = Buffer.alloc(sampleSize * 3);
+
+    for (let offsetMultiplier = 0; offsetMultiplier <= 2 ; offsetMultiplier++) {
+      const fd = fs.openSync(path, "r");
+
+      const offset = offsetMultiplier * sampleSize;
+      const position = offsetMultiplier * (sampleSize + numBytesBetweenSamples);
+
+      fs.readSync(fd, buffer,offset,sampleSize, position);
+    }
+
+    hash.update(buffer);
+  }
+
+  return hash.digest;
+}
